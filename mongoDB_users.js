@@ -7,8 +7,6 @@ const User_data =async()=>{
     let data = await client.connect()
     let db = data.db(DBName)
     let collection = db.collection('Users')
-    // let collection = db.collection('Users')
-    // let result= await collection.find().toArray()
     return collection
 }
 
