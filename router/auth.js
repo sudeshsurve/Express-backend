@@ -28,7 +28,7 @@ router.post('/signup' ,
         return res.status(400).json({
             msg :'email already exists'
         })
-     }
+     }    
    let hashPassword = await bcrypt.hash(password , 10)
    await data.insertOne({email , password:hashPassword , fullName})
 //    users.push({email , password:hashPassword , fullname})
@@ -42,15 +42,16 @@ router.post('/login' ,async (req , res)=>{
     const data = await DBconnect()
     let user = await data.findOne({email})
     if(!user){
-           return res.status(400).json({
-            msg :'Invalid Cradantial'
+           return res.status(200).json({
+            msg :'Invalid Cradantial', user:false
            })
             }
     let isMatchpass  = await bcrypt.compare(password , user.password)
     console.log(isMatchpass)
     if(!isMatchpass){
-                return res.status(400).json({
-                 msg :'Invalid Cradantial pass'
+                return res.json({
+                 msg :'Invalid Cradantial',
+                  user:false
                 })
                  } 
                  let token = await JWT.sign({email} ,'secret_key')
@@ -60,10 +61,16 @@ router.post('/login' ,async (req , res)=>{
 
 
 router.get('/all' , async(req , res)=>{
-     let data = await DBconnect()
+    try {
+      let data = await DBconnect()
  let result =  await data.find().toArray()
-res.send(result)
-})
+res.send(result)   
+    } catch (error) {
+       res.json({
+        "mesage" :'not found'
+       }) 
+    }
+})  
 
 
 

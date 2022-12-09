@@ -6,9 +6,17 @@ const checkAuth = require('../middleware/Chaeck-Auth')
 
 
 router.get("/all_users" ,checkAuth, async(req , res)=>{
-        let data = await dbconnect()
+  try {
+      let data = await dbconnect()
    let result =  await data.find().toArray()
-  res.send(result)
+   setTimeout(() => {
+     res.json(result)
+   }, 2000);
+  } catch (error) {
+    res.json({
+      "msg" :"user not found"
+    })  
+  }    
 })
 
   
@@ -31,8 +39,8 @@ router.get("/all_users" ,checkAuth, async(req , res)=>{
       let data = await dbconnect()
       let result = await data.updateOne({_id : new mongodb.ObjectId(Id)}, {$set :req.body})
   res.status(200).send(result)
-  console.log(req.params)
-  
+  console.log(req.params) 
+   
   })
   
   router.get('/:id' ,checkAuth, async(req , res)=>{
