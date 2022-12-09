@@ -42,7 +42,6 @@ router.get("/all_users" ,checkAuth, async(req , res)=>{
   console.log(req.params) 
    
   })
-  
   router.get('/:id' ,checkAuth, async(req , res)=>{
   let Id = req.params.id
     let data = await dbconnect()
